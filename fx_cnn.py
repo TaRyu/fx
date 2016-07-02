@@ -13,8 +13,8 @@ from tensorflow.contrib import learn
 
 PATH_FILE_FINAL = ['EURUSD_FINAL_M.npy', 'EURUSD_FINAL_S.pkl']
 
-data = np.load(PATH_FILE_FINAL[0])
-data_s = pd.read_pickle(PATH_FILE_FINAL[1])
+data = np.load(PATH_FILE_FINAL[0])[:4]
+data_s = pd.read_pickle(PATH_FILE_FINAL[1])[:4]
 labels = data_s['buy_or_sell']
 data = preprocessing.normalize(data)
 
