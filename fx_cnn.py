@@ -17,8 +17,7 @@ NUM_PIX = 24 * 24
 data = np.load(PATH_FILE_FINAL[0])[:4]
 data_s = pd.read_pickle(PATH_FILE_FINAL[1])[:4]
 labels = data_s['buy_or_sell']
-data = preprocessing.normalize(data.reshape(
-    len(data), NUM_PIX)).reshape(data.shape)
+data = preprocessing.normalize(data.reshape(len(data), NUM_PIX))
 
 
 def max_pool_2x2(tensor_in):
