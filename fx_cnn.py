@@ -6,17 +6,24 @@ from __future__ import print_function
 
 import numpy as np
 import pandas as pd
-from sklearn import preprocessing, metrics
+from sklearn import metrics
+import time
 
 import tensorflow as tf
 from tensorflow.contrib import learn
 
 PATH_FILE_FINAL = ['EURUSD_FINAL_M.npy', 'EURUSD_FINAL_S.pkl']
 
-data = np.load(PATH_FILE_FINAL[0])[:4]
-data_s = pd.read_pickle(PATH_FILE_FINAL[1])[:4]
+data = np.load(PATH_FILE_FINAL[0])
+data_s = pd.read_pickle(PATH_FILE_FINAL[1])
 labels = data_s['buy_or_sell']
-data = preprocessing.normalize(data)
+range_price = data_s['max_price'] - data_s['min_price']
+data = data = np.array([(data[i] - data_s['min_price'][i]) /
+                        range_price[i] for i in range(data.shape[0])])
+data_train = data[:data.shape[0] - 354]
+data_test = data[data.shape[0] - 354:]
+labels_train = labels[:data.shape[0] - 354]
+labels_test = labels[data.shape[0] - 354:]
 
 
 def max_pool_2x2(tensor_in):
@@ -37,7 +44,7 @@ def conv_model(X, y):
                                    bias=True, activation=tf.nn.relu)
         h_pool2 = max_pool_2x2(h_conv2)
         # reshape tensor into a batch of vectors
-        h_pool2_flat = tf.reshape(h_pool2, [-1, 7 * 7 * 64])
+        h_pool2_flat = tf.reshape(h_pool2, [-1, 6 * 6 * 64])
     # densely connected layer with 1024 neurons
     h_fc1 = learn.ops.dnn(
         h_pool2_flat, [1024], activation=tf.nn.relu, dropout=0.5)
@@ -47,6 +54,9 @@ def conv_model(X, y):
 classifier = learn.TensorFlowEstimator(
     model_fn=conv_model, n_classes=2, batch_size=100, steps=20000,
     learning_rate=0.001)
-classifier.fit(data, labels)
-score = metrics.accuracy_score(labels, classifier.predict(data))
+start = time.time()
+classifier.fit(data_train, labels_train, logdir='/tmp/tf_examples/my_model_1/')
+end = time.time()
+print('Fit time cost: {0:f}'.format(end - start))
+score = metrics.accuracy_score(labels_test, classifier.predict(data_test))
 print('Accuracy: {0:f}'.format(score))
