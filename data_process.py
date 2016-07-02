@@ -45,5 +45,9 @@ def one2two(file_in=PATH_FILE_OUT, file_out=PATH_FILE_FINAL):
             [data[i + 1][NUM_PIX / 24 - 1][23] > data[i + 1][0][0]
              for i in range(data.shape[0] - 1)])}
     data_s = pd.DataFrame(data_s)
+    data = data.reshape(len(data), NUM_PIX)
     np.save(file_out[0], data[:len(data) - 1])
     data_s.to_pickle(file_out[1])
+
+if __name__ == '__main__':
+    one2two()
