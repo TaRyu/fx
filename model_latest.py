@@ -95,5 +95,4 @@ if __name__ == '__main__':
     classifier.fit(data, data_s['buy_or_sell'],
                    logdir='../data/fx/latest/LOG_EURUSD20160630/')
     end = time.time()
-    classifier.save('../data/fx/latest/EURUSD20160630/')
-    print('Fit cost %fs' % end - start)
+    print('Fit cost %fs' % (end - start))

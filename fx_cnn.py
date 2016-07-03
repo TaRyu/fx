@@ -45,7 +45,7 @@ classifier = learn.TensorFlowEstimator(
     model_fn=conv_model, n_classes=2, batch_size=100, steps=20000,
     learning_rate=0.001)
 time_format = '%Y%m%d%H%M'
-result = np.array(0)
+result_tmp = np.empty(0)
 
 if __name__ == '__main__':
     for fx in FX_LIST:
@@ -71,7 +71,7 @@ if __name__ == '__main__':
         time_cost = end - start
         score = metrics.accuracy_score(
             data_s_test['buy_or_sell'], classifier.predict(data_test))
-        result = np.append(result, [score, time_cost])
-    result = pd.DataFrame(result.reshape(-1, 2),
+        result_tmp = np.append(result_tmp, [score, time_cost])
+    result = pd.DataFrame(result_tmp.reshape(-1, 2),
                           index=FX_LIST, columns=['score', 'time_cost'])
     result.to_pickle('result.pkl')
