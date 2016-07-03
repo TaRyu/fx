@@ -5,6 +5,8 @@ from pandas.tseries.offsets import CustomBusinessHour
 import pandas as pd
 import numpy as np
 
+FX_LIST = ['EURUSD', 'USDJPY', 'GBPUSD', 'AUDUSD', 'EURJPY']
+FILE_PREX = '../data/fx'
 PATH_FILE_IN = '../data/fx/EURUSD.csv'
 PATH_FILE_OUT = 'EURUSD_H.pkl'
 PATH_FILE_FINAL = ['EURUSD_FINAL_M.npy', 'EURUSD_FINAL_S.pkl']
@@ -29,20 +31,19 @@ def m2h(file_in=PATH_FILE_IN, file_out=PATH_FILE_OUT):
 
 def one2two(file_in=PATH_FILE_OUT, file_out=PATH_FILE_FINAL):
     data = pd.read_pickle(file_in)['close']
-    len_data = len(data)
-    data = data.reshape(len_data / 24, 24)
-    data = np.array([data[i:i + 24] for i in range(len_data / 24 - 24 + 1)])
+    data = data.reshape(-1, 24)
+    data = np.array([data[i:i + 24] for i in range(data.shape[0] - 24 + 1)])
     data_s = {
         'open_price': np.array([data[i][0][0]
                                 for i in range(data.shape[0] - 1)]),
-        'close_price': np.array([data[i][NUM_PIX / 24 - 1][23]
+        'close_price': np.array([data[i][int(NUM_PIX / 24) - 1][23]
                                  for i in range(data.shape[0] - 1)]),
         'max_price': np.array([data[i].max()
                                for i in range(data.shape[0] - 1)]),
         'min_price': np.array([data[i].min()
                                for i in range(data.shape[0] - 1)]),
         'buy_or_sell': np.array(
-            [data[i + 1][NUM_PIX / 24 - 1][23] > data[i + 1][0][0]
+            [data[i + 1][int(NUM_PIX / 24) - 1][23] > data[i + 1][0][0]
              for i in range(data.shape[0] - 1)])}
     data_s = pd.DataFrame(data_s)
     data = data.reshape(len(data), NUM_PIX)
@@ -50,4 +51,10 @@ def one2two(file_in=PATH_FILE_OUT, file_out=PATH_FILE_FINAL):
     data_s.to_pickle(file_out[1])
 
 if __name__ == '__main__':
-    one2two()
+    for fx in FX_LIST:
+        path_f_in = '%s/%s.txt' % (FILE_PREX, fx)
+        path_f_out = '%s/%s_H.pkl' % (FILE_PREX, fx)
+        path_f_final = ['%s/%s_FINAL_M.npy' % (FILE_PREX, fx),
+                        '%s/%s_FINAL_S.pkl' % (FILE_PREX, fx)]
+        m2h(path_f_in, path_f_out)
+        one2two(path_f_out, path_f_final)

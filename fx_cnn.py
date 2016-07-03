@@ -12,18 +12,8 @@ import time
 import tensorflow as tf
 from tensorflow.contrib import learn
 
-PATH_FILE_FINAL = ['EURUSD_FINAL_M.npy', 'EURUSD_FINAL_S.pkl']
-
-data = np.load(PATH_FILE_FINAL[0])
-data_s = pd.read_pickle(PATH_FILE_FINAL[1])
-labels = data_s['buy_or_sell']
-range_price = data_s['max_price'] - data_s['min_price']
-data = data = np.array([(data[i] - data_s['min_price'][i]) /
-                        range_price[i] for i in range(data.shape[0])])
-data_train = data[:data.shape[0] - 354]
-data_test = data[data.shape[0] - 354:]
-labels_train = labels[:data.shape[0] - 354]
-labels_test = labels[data.shape[0] - 354:]
+FX_LIST = ['EURUSD', 'USDJPY', 'GBPUSD', 'AUDUSD', 'EURJPY']
+FILE_PREX = '../data/fx'
 
 
 def max_pool_2x2(tensor_in):
@@ -54,9 +44,34 @@ def conv_model(X, y):
 classifier = learn.TensorFlowEstimator(
     model_fn=conv_model, n_classes=2, batch_size=100, steps=20000,
     learning_rate=0.001)
-start = time.time()
-classifier.fit(data_train, labels_train, logdir='/tmp/tf_examples/my_model_1/')
-end = time.time()
-print('Fit time cost: {0:f}'.format(end - start))
-score = metrics.accuracy_score(labels_test, classifier.predict(data_test))
-print('Accuracy: {0:f}'.format(score))
+time_format = '%Y%m%d%H%M'
+result = np.array(0)
+
+if __name__ == '__main__':
+    for fx in FX_LIST:
+        path_f_final = ['%s/%s_FINAL_M.npy' % (FILE_PREX, fx),
+                        '%s/%s_FINAL_S.pkl' % (FILE_PREX, fx)]
+        data = np.load(path_f_final[0])
+        data_s = pd.read_pickle(path_f_final[1])
+        range_price = data_s['max_price'] - data_s['min_price']
+        data = np.array([(data[i] - data_s['min_price'][i]) /
+                         range_price[i] for i in range(data.shape[0])])
+        data_train = data[:data.shape[0] - 354]
+        data_test = data[data.shape[0] - 354:]
+        data_s_train = data_s[:data.shape[0] - 354]
+        data_s_test = data_s[data.shape[0] - 354:]
+        start = time.time()
+        logdir = '../data/fx/tensorboard_models/%s%s' % (
+            fx, time.strftime(time_format, time.localtime()))
+        classifier.fit(data_train, data_s_train['buy_or_sell'],
+                       logdir=logdir)
+        end = time.time()
+        data_s_test['predict'] = classifier.predict(data_test)
+        data_s_test.to_pickle('%s/%sprediction.pkl' % (logdir, fx))
+        time_cost = end - start
+        score = metrics.accuracy_score(
+            data_s_test['buy_or_sell'], classifier.predict(data_test))
+        result = np.append(result, [score, time_cost])
+    result = pd.DataFrame(result.reshape(-1, 2),
+                          index=FX_LIST, columns=['score', 'time_cost'])
+    result.to_pickle('result.pkl')
