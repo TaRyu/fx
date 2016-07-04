@@ -42,6 +42,10 @@ def one2two(file_in=PATH_FILE_OUT, file_out=PATH_FILE_FINAL):
                                for i in range(data.shape[0] - 1)]),
         'min_price': np.array([data[i].min()
                                for i in range(data.shape[0] - 1)]),
+        'mean_price': np.array([data[i].mean()
+                                for i in range(data.shape[0] - 1)]),
+        'median_price': np.array([np.median(data[i])
+                                  for i in range(data.shape[0] - 1)]),
         'buy_or_sell': np.array(
             [data[i + 1][int(NUM_PIX / 24) - 1][23] > data[i + 1][0][0]
              for i in range(data.shape[0] - 1)])}

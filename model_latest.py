@@ -13,7 +13,7 @@ from pandas.tseries.offsets import CustomBusinessHour
 import tensorflow as tf
 from tensorflow.contrib import learn
 
-PATH_FILE_IN = '../data/fx/latest/EURUSD20160630.txt'
+FX_LIST = ['EURUSD', 'USDJPY', 'GBPUSD', 'AUDUSD', 'EURJPY']
 NUM_PIX = 24 * 24
 CUSTOM_BH = CustomBusinessHour(calendar=USFederalHolidayCalendar(),
                                start='00:00', end="23:59")
@@ -21,7 +21,7 @@ RANGE_TIME = pd.DatetimeIndex(start='200101030000',
                               end='201606302300', freq=CUSTOM_BH)
 
 
-def m2h(file_in=PATH_FILE_IN):
+def m2h(file_in):
     data = pd.read_csv(file_in, dtype='str')
     data['DateTime'] = pd.to_datetime(
         data['<DTYYYYMMDD>'].map(str) + data['<TIME>'].map(str),
@@ -33,8 +33,8 @@ def m2h(file_in=PATH_FILE_IN):
     return data
 
 
-def one2two():
-    data = m2h()['close']
+def one2two(data, fx_out):
+    data = data['close']
     data = data.reshape(-1, 24)
     data = np.array([data[i:i + 24] for i in range(data.shape[0] - 24 + 1)])
     data_s = {
@@ -51,7 +51,7 @@ def one2two():
              for i in range(data.shape[0] - 1)])}
     data_s = pd.DataFrame(data_s)
     data = data.reshape(len(data), NUM_PIX)
-    np.save('../data/fx/latest/EURUSD20160630.npy', data)
+    np.save(fx_out, data)
     return data[:len(data) - 1], data_s
 
 
@@ -87,12 +87,14 @@ time_format = '%Y%m%d%H%M'
 result = np.array(0)
 
 if __name__ == '__main__':
-    data, data_s = one2two()
-    range_price = data_s['max_price'] - data_s['min_price']
-    data = data = np.array([(data[i] - data_s['min_price'][i]) /
-                            range_price[i] for i in range(data.shape[0])])
-    start = time.time()
-    classifier.fit(data, data_s['buy_or_sell'],
-                   logdir='../data/fx/latest/LOG_EURUSD20160630/')
-    end = time.time()
-    print('Fit cost %fs' % (end - start))
+    for fx in FX_LIST:
+        data = m2h('..data/fx/%s.txt' % fx)
+        data, data_s = (data, '../data/fx/latest/%s.npy' % fx)
+        range_price = data_s['max_price'] - data_s['min_price']
+        data = data = np.array([(data[i] - data_s['min_price'][i]) /
+                                range_price[i] for i in range(data.shape[0])])
+        start = time.time()
+        classifier.fit(data, data_s['buy_or_sell'],
+                       logdir='../data/fx/latest/LOG_%s/' % fx)
+        end = time.time()
+        print('Fit cost %fs' % (end - start))
