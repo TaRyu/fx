@@ -74,4 +74,4 @@ if __name__ == '__main__':
         result_tmp = np.append(result_tmp, [score, time_cost])
     result = pd.DataFrame(result_tmp.reshape(-1, 2),
                           index=FX_LIST, columns=['score', 'time_cost'])
-    result.to_pickle('result.pkl')
+    result.to_pickle('../data/result.pkl')

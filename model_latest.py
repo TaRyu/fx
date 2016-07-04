@@ -88,8 +88,8 @@ result = np.array(0)
 
 if __name__ == '__main__':
     for fx in FX_LIST:
-        data = m2h('..data/fx/%s.txt' % fx)
-        data, data_s = (data, '../data/fx/latest/%s.npy' % fx)
+        data = m2h('../data/fx/%s.txt' % fx)
+        data, data_s = one2two(data, '../data/fx/latest/%s.npy' % fx)
         range_price = data_s['max_price'] - data_s['min_price']
         data = data = np.array([(data[i] - data_s['min_price'][i]) /
                                 range_price[i] for i in range(data.shape[0])])
