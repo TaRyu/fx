@@ -94,7 +94,7 @@ if __name__ == '__main__':
         data = data = np.array([(data[i] - data_s['min_price'][i]) /
                                 range_price[i] for i in range(data.shape[0])])
         start = time.time()
-        classifier.fit(data, data_s['buy_or_sell'],
-                       logdir='../data/fx/latest/LOG_%s/' % fx)
+        classifier.fit(data, data_s['buy_or_sell'])
+        classifier.save('../data/fx/latest/%s/' % fx)
         end = time.time()
         print('Fit cost %fs' % (end - start))
