@@ -13,7 +13,7 @@ import tensorflow as tf
 from tensorflow.contrib import learn
 
 FX_LIST = ['EURUSD', 'USDJPY', 'GBPUSD', 'AUDUSD', 'EURJPY']
-FILE_PREX = '../data/fx'
+FILE_PREX = '../data/fx/re'
 
 
 def max_pool_2x2(tensor_in):
@@ -42,7 +42,7 @@ def conv_model(X, y):
 
 # Training and predicting
 classifier = learn.TensorFlowEstimator(
-    model_fn=conv_model, n_classes=2, batch_size=100, steps=20000,
+    model_fn=conv_model, n_classes=0, batch_size=100, steps=20000,
     learning_rate=0.001)
 time_format = '%Y%m%d%H%M'
 result_tmp = np.empty(0)
@@ -61,17 +61,17 @@ if __name__ == '__main__':
         data_s_train = data_s[:data.shape[0] - 354]
         data_s_test = data_s[data.shape[0] - 354:]
         start = time.time()
-        logdir = '../data/fx/tensorboard_models/%s%s' % (
+        logdir = '../data/fx/re/tensorboard_models/%s%s' % (
             fx, time.strftime(time_format, time.localtime()))
-        classifier.fit(data_train, data_s_train['buy_or_sell'],
+        classifier.fit(data_train, data_s_train['change'],
                        logdir=logdir)
         end = time.time()
         data_s_test['predict'] = classifier.predict(data_test)
         data_s_test.to_pickle('%s/%sprediction.pkl' % (logdir, fx))
         time_cost = end - start
-        score = metrics.accuracy_score(
-            data_s_test['buy_or_sell'], classifier.predict(data_test))
+        score = metrics.explained_variance_score(
+            data_s_test['change'], classifier.predict(data_test))
         result_tmp = np.append(result_tmp, [score, time_cost])
     result = pd.DataFrame(result_tmp.reshape(-1, 2),
                           index=FX_LIST, columns=['score', 'time_cost'])
-    result.to_pickle('../data/fx/result.pkl')
+    result.to_pickle('../data/fx/re/result.pkl')

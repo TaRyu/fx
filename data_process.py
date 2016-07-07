@@ -47,7 +47,11 @@ def one2two(file_in=PATH_FILE_OUT, file_out=PATH_FILE_FINAL):
         'median_price': np.array([np.median(data[i])
                                   for i in range(data.shape[0] - 1)]),
         'buy_or_sell': np.array(
-            [data[i + 1][int(NUM_PIX / 24) - 1][23] > data[i + 1][0][0]
+            [int(data[i + 1][int(NUM_PIX / 24) - 1][23] > data[i + 1][0][0])
+             for i in range(data.shape[0] - 1)]),
+        'change': np.array(
+            [(data[i + 1][int(NUM_PIX / 24) - 1][23] - data[i + 1][0][0]) /
+             data[i + 1][int(NUM_PIX / 24) - 1][23] * 100
              for i in range(data.shape[0] - 1)])}
     data_s = pd.DataFrame(data_s)
     data = data.reshape(len(data), NUM_PIX)
