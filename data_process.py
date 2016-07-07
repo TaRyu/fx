@@ -54,6 +54,13 @@ def one2two(file_in=PATH_FILE_OUT, file_out=PATH_FILE_FINAL):
              data[i + 1][int(NUM_PIX / 24) - 1][23] * 100
              for i in range(data.shape[0] - 1)])}
     data_s = pd.DataFrame(data_s)
+    bins = [-100, -5, -4, -3, -2, -1.5, -1, -
+            0.5, 0, 0.5, 1, 1.5, 2, 3, 4, 5, 100]
+    labels = [-8, -7, -6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 7, 8]
+    data_s['change_D_16'] = pd.cut(data_s['change'], bins, labels=labels)
+    bins = [-100, -5, -2, 0, 2, 5, 100]
+    labels = [-3, -2, -1, 1, 2, 3]
+    data_s['change_D'] = pd.cut(data_s['change'], bins, labels=labels)
     data = data.reshape(len(data), NUM_PIX)
     np.save(file_out[0], data[:len(data) - 1])
     data_s.to_pickle(file_out[1])

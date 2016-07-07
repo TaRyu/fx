@@ -47,11 +47,11 @@ if __name__ == '__main__':
             classifier = classifiers[i]
             pass
             start = time.time()
-            classifier.fit(data_train, data_s_train['buy_or_sell'])
+            classifier.fit(data_train, data_s_train['change_D'])
             end = time.time()
             time_cost = end - start
             score = metrics.accuracy_score(
-                data_s_test['buy_or_sell'], classifier.predict(data_test))
+                data_s_test['change_D'], classifier.predict(data_test))
             result_tmp = np.append(result_tmp, [score, time_cost])
     result = pd.DataFrame(result_tmp.reshape(-1, 2 * len(names)),
                           index=FX_LIST, columns=columns_define())
