@@ -55,4 +55,4 @@ if __name__ == '__main__':
             result_tmp = np.append(result_tmp, [score, time_cost])
     result = pd.DataFrame(result_tmp.reshape(-1, 2 * len(names)),
                           index=FX_LIST, columns=columns_define())
-    result.to_pickle('../data/result_compere.pkl')
+    result.to_pickle('../data/fx/result_compere.pkl')
