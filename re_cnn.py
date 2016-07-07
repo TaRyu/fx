@@ -13,7 +13,7 @@ import tensorflow as tf
 from tensorflow.contrib import learn
 
 FX_LIST = ['EURUSD', 'USDJPY', 'GBPUSD', 'AUDUSD', 'EURJPY']
-FILE_PREX = '../data/fx/re'
+FILE_PREX = '../data/fx'
 
 
 def max_pool_2x2(tensor_in):
@@ -38,7 +38,7 @@ def conv_model(X, y):
     # densely connected layer with 1024 neurons
     h_fc1 = learn.ops.dnn(
         h_pool2_flat, [1024], activation=tf.nn.relu, dropout=0.5)
-    return learn.models.logistic_regression(h_fc1, y)
+    return learn.models.linear_regression(h_fc1, y)
 
 # Training and predicting
 classifier = learn.TensorFlowEstimator(
