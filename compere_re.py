@@ -19,7 +19,7 @@ res = [SVR(kernel='linear'), SVR(),
        KNeighborsRegressor(), RandomForestRegressor()]
 time_format = '%Y%m%d%H%M'
 result_tmp = np.empty(0)
-num_test = 605
+num_test = 354
 
 
 if __name__ == '__main__':

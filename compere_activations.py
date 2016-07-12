@@ -13,14 +13,10 @@ import tensorflow as tf
 from tensorflow.contrib import learn
 
 FX_LIST = ['EURUSD', 'USDJPY', 'GBPUSD', 'AUDUSD', 'EURJPY']
-# FILE_PREX = '../data/fx'
-# names = ['relu', 'relu6', 'elu', 'softplus', 'softsign', 'sigmoid', 'tanh']
-# activations = [tf.nn.relu, tf.nn.relu6, tf.nn.elu,
-#                tf.nn.softplus, tf.nn.softsign, tf.sigmoid, tf.tanh]
-# FX_LIST = ['EURUSD']
 FILE_PREX = '../data/fx'
-names = ['relu', 'softplus']
-activations = [tf.nn.relu, tf.nn.softplus]
+names = ['relu', 'relu6', 'elu', 'softplus', 'softsign', 'sigmoid', 'tanh']
+activations = [tf.nn.relu, tf.nn.relu6, tf.nn.elu,
+               tf.nn.softplus, tf.nn.softsign, tf.sigmoid, tf.tanh]
 
 
 def max_pool_2x2(tensor_in):
@@ -30,7 +26,7 @@ def max_pool_2x2(tensor_in):
 
 time_format = '%Y%m%d%H%M'
 result_tmp = np.empty(0)
-num_test = 605
+num_test = 354
 
 if __name__ == '__main__':
     for fx in FX_LIST:
