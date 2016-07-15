@@ -14,8 +14,7 @@ from tensorflow.contrib import learn
 
 FX_LIST = ['EURUSD', 'USDJPY', 'GBPUSD', 'AUDUSD', 'EURJPY']
 FILE_PREX = '../data/fx'
-optimizers = ['GradientDescent', 'Adadelta',
-              'Momentum', 'Adam', 'Ftrl', 'RMSProp']
+optimizers = ['SGD', 'Adam', 'Ftrl', 'RMSProp']
 
 
 def max_pool_2x2(tensor_in):
