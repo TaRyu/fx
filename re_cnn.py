@@ -17,7 +17,7 @@ FILE_PREX = '../data/fx'
 
 
 def max_pool_2x2(tensor_in):
-    return tf.nn.max_pool(tensor_in, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1],
+    return tf.nn.avg_pool(tensor_in, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1],
                           padding='SAME')
 
 
@@ -61,7 +61,7 @@ if __name__ == '__main__':
         data_s_train = data_s[:data.shape[0] - 354]
         data_s_test = data_s[data.shape[0] - 354:]
         start = time.time()
-        logdir = '../data/fx/re/tensorboard_models/%s%s' % (
+        logdir = '../data/fx/re_av/tensorboard_models/%s%s' % (
             fx, time.strftime(time_format, time.localtime()))
         classifier.fit(data_train, data_s_train['change'],
                        logdir=logdir)
@@ -74,4 +74,4 @@ if __name__ == '__main__':
         result_tmp = np.append(result_tmp, [score, time_cost])
     result = pd.DataFrame(result_tmp.reshape(-1, 2),
                           index=FX_LIST, columns=['score', 'time_cost'])
-    result.to_pickle('../data/fx/re/result.pkl')
+    result.to_pickle('../data/fx/re_av/result.pkl')
