@@ -7,6 +7,7 @@ from __future__ import print_function
 import numpy as np
 import pandas as pd
 
+from sklearn.linear_model import SGDRegressor, Ridge
 from sklearn.svm import SVR
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.ensemble import RandomForestRegressor
@@ -14,8 +15,8 @@ from sklearn import metrics
 
 FX_LIST = ['EURUSD', 'USDJPY', 'GBPUSD', 'AUDUSD', 'EURJPY']
 FILE_PREX = '../data/fx'
-names = ["Linear_SVM", "RBF_SVM", 'KNN', "Random_Forest"]
-res = [SVR(kernel='linear'), SVR(),
+names = ["SGD", 'Ridge', "SVR", 'KNN', "Random_Forest"]
+res = [SGDRegressor(), Ridge(), SVR(),
        KNeighborsRegressor(), RandomForestRegressor()]
 time_format = '%Y%m%d%H%M'
 result_tmp = np.empty(0)
