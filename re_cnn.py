@@ -17,7 +17,7 @@ FILE_PREX = '../data/fx'
 
 
 def max_pool_2x2(tensor_in):
-    return tf.nn.avg_pool(tensor_in, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1],
+    return tf.nn.max_pool(tensor_in, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1],
                           padding='SAME')
 
 

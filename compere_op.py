@@ -14,7 +14,7 @@ from tensorflow.contrib import learn
 
 FX_LIST = ['EURUSD', 'USDJPY', 'GBPUSD', 'AUDUSD', 'EURJPY']
 FILE_PREX = '../data/fx'
-optimizers = ['SGD', 'Adam', 'Ftrl', 'RMSProp']
+optimizers = ['SGD', 'Adagrad']
 
 
 def max_pool_2x2(tensor_in):
@@ -25,21 +25,24 @@ def max_pool_2x2(tensor_in):
 def conv_model(X, y):
     X = tf.reshape(X, [-1, 24, 24, 1])
     # first conv layer will compute 32 features for each 5x5 patch
-    with tf.variable_scope('conv_layer1'):
+    with tf.variable_scope('Convolution Layer1'):
         h_conv1 = learn.ops.conv2d(X, n_filters=32, filter_shape=[5, 5],
                                    bias=True, activation=tf.nn.relu)
         h_pool1 = max_pool_2x2(h_conv1)
     # second conv layer will compute 64 features for each 5x5 patch
-    with tf.variable_scope('conv_layer2'):
+    with tf.variable_scope('Convolution Layer2'):
         h_conv2 = learn.ops.conv2d(h_pool1, n_filters=64, filter_shape=[5, 5],
                                    bias=True, activation=tf.nn.relu)
         h_pool2 = max_pool_2x2(h_conv2)
         # reshape tensor into a batch of vectors
         h_pool2_flat = tf.reshape(h_pool2, [-1, 6 * 6 * 64])
     # densely connected layer with 1024 neurons
-    h_fc1 = learn.ops.dnn(
-        h_pool2_flat, [1024], activation=tf.nn.relu, dropout=0.5)
-    return learn.models.linear_regression(h_fc1, y)
+    with tf.variable_scope('Fully Connected Layer'):
+        h_fc1 = learn.ops.dnn(
+            h_pool2_flat, [1024], activation=tf.nn.relu, dropout=0.5)
+    with tf.variable_scope('Linear Regression Layer'):
+        o_linear = learn.models.linear_regression(h_fc1, y)
+    return o_linear
 
 
 time_format = '%Y%m%d%H%M'
@@ -52,7 +55,7 @@ if __name__ == '__main__':
             re = learn.TensorFlowEstimator(
                 model_fn=conv_model,
                 n_classes=0,
-                batch_size=100, steps=20000,
+                batch_size=100, steps=30000,
                 optimizer=optimizer,
                 learning_rate=0.001)
             path_f_final = ['%s/%s_FINAL_M.npy' % (FILE_PREX, fx),
