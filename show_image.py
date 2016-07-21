@@ -23,7 +23,7 @@ ax.xaxis.set_ticks_position('bottom')
 
 font = {'family': 'serif',
         'weight': 'normal',
-        'size': 20,
+        'size': 16,
         }
 
 plt.xlabel('24 hours', fontdict=font)
