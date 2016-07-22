@@ -25,8 +25,8 @@ num_test = 8496
 
 if __name__ == '__main__':
     for fx in FX_LIST:
-        path_f_final = ['%s/%s_FINAL_M_new.npy' % (FILE_PREX, fx),
-                        '%s/%s_FINAL_S_new.pkl' % (FILE_PREX, fx)]
+        path_f_final = ['%s/%s_FINAL_M_new100.npy' % (FILE_PREX, fx),
+                        '%s/%s_FINAL_S_new100.pkl' % (FILE_PREX, fx)]
         data = np.load(path_f_final[0])
         data_s = pd.read_pickle(path_f_final[1])
         range_price = data_s['max_price'] - data_s['min_price']
@@ -44,7 +44,7 @@ if __name__ == '__main__':
                 data_s_test['change'], prediction)
             result_tmp = np.append(result_tmp, score)
             data_s_test['%s' % names[i]] = prediction
-        data_s_test.to_pickle('%s/%s_com_pre_re_new.pkl' % (FILE_PREX, fx))
+        data_s_test.to_pickle('%s/%s_com_pre_re_new100.pkl' % (FILE_PREX, fx))
     result = pd.DataFrame(result_tmp.reshape(-1, len(names)),
                           index=FX_LIST, columns=names)
-    result.to_pickle('../data/fx/result_compere_re_new.pkl')
+    result.to_pickle('../data/fx/result_compere_re_new100.pkl')

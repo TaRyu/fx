@@ -39,7 +39,7 @@ def one2two(file_in=PATH_FILE_OUT, file_out=PATH_FILE_FINAL):
              for i in range(data.shape[0] - 1)]),
         'change': np.array(
             [(data[i + 1][575] - data[i + 1][0]) /
-             data[i + 1][575]
+             data[i + 1][575] * 100
              for i in range(data.shape[0] - 1)])}
     data_s = pd.DataFrame(data_s)
     bins = [-100, -5, -4, -3, -2, -1.5, -1, -
@@ -58,6 +58,6 @@ def one2two(file_in=PATH_FILE_OUT, file_out=PATH_FILE_FINAL):
 if __name__ == '__main__':
     for fx in FX_LIST:
         path_f_out = '%s/%s_H.pkl' % (FILE_PREX, fx)
-        path_f_final = ['%s/%s_FINAL_M_new.npy' % (FILE_PREX, fx),
-                        '%s/%s_FINAL_S_new.pkl' % (FILE_PREX, fx)]
+        path_f_final = ['%s/%s_FINAL_M_new100.npy' % (FILE_PREX, fx),
+                        '%s/%s_FINAL_S_new100.pkl' % (FILE_PREX, fx)]
         one2two(path_f_out, path_f_final)

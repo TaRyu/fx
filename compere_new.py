@@ -58,8 +58,8 @@ if __name__ == '__main__':
                 batch_size=100, steps=20000,
                 optimizer=optimizer,
                 learning_rate=0.001)
-            path_f_final = ['%s/%s_FINAL_M_new.npy' % (FILE_PREX, fx),
-                            '%s/%s_FINAL_S_new.pkl' % (FILE_PREX, fx)]
+            path_f_final = ['%s/%s_FINAL_M_new100.npy' % (FILE_PREX, fx),
+                            '%s/%s_FINAL_S_new100.pkl' % (FILE_PREX, fx)]
             data = np.load(path_f_final[0])
             data_s = pd.read_pickle(path_f_final[1])
             range_price = data_s['max_price'] - data_s['min_price']
@@ -70,7 +70,7 @@ if __name__ == '__main__':
             data_s_train = data_s[:data.shape[0] - num_test]
             data_s_test = data_s[data.shape[0] - num_test:]
             start = time.time()
-            logdir = '../data/fx/re_new/tensorboard_models/%s%s%s' % (
+            logdir = '../data/fx/re_new100/tensorboard_models/%s%s%s' % (
                 optimizer,
                 fx,
                 time.strftime(time_format, time.localtime()))
@@ -84,4 +84,4 @@ if __name__ == '__main__':
             result_tmp = np.append(result_tmp, score)
     result = pd.DataFrame(result_tmp.reshape(-1, len(optimizers)),
                           index=FX_LIST, columns=optimizers)
-    result.to_pickle('../data/fx/re_new/result.pkl')
+    result.to_pickle('../data/fx/re_new100/result.pkl')
