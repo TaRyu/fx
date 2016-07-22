@@ -14,7 +14,7 @@ from tensorflow.contrib import learn
 
 FX_LIST = ['EURUSD', 'USDJPY', 'GBPUSD', 'AUDUSD', 'EURJPY']
 FILE_PREX = '../data/fx'
-optimizers = ['Adagrad']
+optimizers = ['SGD']
 
 
 def max_pool_2x2(tensor_in):
@@ -55,7 +55,7 @@ if __name__ == '__main__':
             re = learn.TensorFlowEstimator(
                 model_fn=conv_model,
                 n_classes=0,
-                batch_size=500, steps=20000,
+                batch_size=100, steps=20000,
                 optimizer=optimizer,
                 learning_rate=0.001)
             path_f_final = ['%s/%s_FINAL_M.npy' % (FILE_PREX, fx),
