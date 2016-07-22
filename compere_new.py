@@ -58,8 +58,8 @@ if __name__ == '__main__':
                 batch_size=100, steps=20000,
                 optimizer=optimizer,
                 learning_rate=0.001)
-            path_f_final = ['%s/%s_FINAL_M.npy' % (FILE_PREX, fx),
-                            '%s/%s_FINAL_S.pkl' % (FILE_PREX, fx)]
+            path_f_final = ['%s/%s_FINAL_M_new.npy' % (FILE_PREX, fx),
+                            '%s/%s_FINAL_S_new.pkl' % (FILE_PREX, fx)]
             data = np.load(path_f_final[0])
             data_s = pd.read_pickle(path_f_final[1])
             range_price = data_s['max_price'] - data_s['min_price']
