@@ -55,7 +55,7 @@ if __name__ == '__main__':
             re = learn.TensorFlowEstimator(
                 model_fn=conv_model,
                 n_classes=0,
-                batch_size=200, steps=20000,
+                batch_size=150, steps=20000,
                 optimizer=optimizer,
                 learning_rate=0.001)
             path_f_final = ['%s/%s_FINAL_M_new100.npy' % (FILE_PREX, fx),
