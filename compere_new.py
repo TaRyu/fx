@@ -82,6 +82,8 @@ if __name__ == '__main__':
             score = metrics.explained_variance_score(
                 (data_s_test['change']), re.predict(data_test))
             result_tmp = np.append(result_tmp, score)
+            print(result_tmp)
     result = pd.DataFrame(result_tmp.reshape(-1, len(optimizers)),
                           index=FX_LIST, columns=optimizers)
+    print(result)
     result.to_pickle('../data/fx/re_new100/result.pkl')
