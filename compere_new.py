@@ -39,7 +39,7 @@ def conv_model(X, y):
     # densely connected layer with 1024 neurons
     with tf.variable_scope('FC_Layer'):
         h_fc1 = learn.ops.dnn(
-            h_pool2_flat, [1024], activation=tf.nn.relu, dropout=0.5)
+            h_pool2_flat, [1024], activation=tf.nn.relu, dropout=0.2)
     with tf.variable_scope('LR_Layer'):
         o_linear = learn.models.linear_regression(h_fc1, y)
     return o_linear
@@ -55,7 +55,7 @@ if __name__ == '__main__':
             re = learn.TensorFlowEstimator(
                 model_fn=conv_model,
                 n_classes=0,
-                batch_size=200, steps=15000,
+                batch_size=100, steps=20000,
                 optimizer=optimizer,
                 learning_rate=0.001)
             path_f_final = ['%s/%s_FINAL_M_new100.npy' % (FILE_PREX, fx),
