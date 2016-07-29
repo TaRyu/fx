@@ -20,7 +20,7 @@ res = [SGDRegressor(), Ridge(), SVR(),
        KNeighborsRegressor(), RandomForestRegressor()]
 time_format = '%Y%m%d%H%M'
 result_tmp = np.empty(0)
-num_test = 8496
+num_test = 8496 * 2
 
 
 if __name__ == '__main__':
@@ -43,8 +43,10 @@ if __name__ == '__main__':
             score = metrics.explained_variance_score(
                 data_s_test['change'], prediction)
             result_tmp = np.append(result_tmp, score)
+            print(result_tmp)
             data_s_test['%s' % names[i]] = prediction
-        data_s_test.to_pickle('%s/%s_com_pre_re_new100.pkl' % (FILE_PREX, fx))
+        data_s_test.to_pickle('%s/%s_com_pre_re_new1002.pkl' % (FILE_PREX, fx))
     result = pd.DataFrame(result_tmp.reshape(-1, len(names)),
                           index=FX_LIST, columns=names)
-    result.to_pickle('../data/fx/result_compere_re_new100.pkl')
+    print(result)
+    result.to_pickle('../data/fx/result_compere_re_new1002.pkl')
