@@ -39,7 +39,7 @@ def conv_model(X, y):
     # densely connected layer with 1024 neurons
     with tf.variable_scope('FC_Layer'):
         h_fc1 = learn.ops.dnn(
-            h_pool2_flat, [1024], activation=tf.nn.relu, dropout=0.2)
+            h_pool2_flat, [1024], activation=tf.nn.relu, dropout=0.7)
     with tf.variable_scope('LR_Layer'):
         o_linear = learn.models.linear_regression(h_fc1, y)
     return o_linear
@@ -47,7 +47,7 @@ def conv_model(X, y):
 
 time_format = '%Y%m%d%H%M'
 result_tmp = np.empty(0)
-num_test = 8496
+num_test = int(8496 / 3) * 5
 
 if __name__ == '__main__':
     for fx in FX_LIST:
@@ -70,7 +70,7 @@ if __name__ == '__main__':
             data_s_train = data_s[:data.shape[0] - num_test]
             data_s_test = data_s[data.shape[0] - num_test:]
             start = time.time()
-            logdir = '../data/fx/re_new100/tensorboard_models/%s%s%s' % (
+            logdir = '../data/fx/35re_new100/tensorboard_models/%s%s%s' % (
                 optimizer,
                 fx,
                 time.strftime(time_format, time.localtime()))
@@ -86,4 +86,4 @@ if __name__ == '__main__':
     result = pd.DataFrame(result_tmp.reshape(-1, len(optimizers)),
                           index=FX_LIST, columns=optimizers)
     print(result)
-    result.to_pickle('../data/fx/re_new100/result.pkl')
+    result.to_pickle('../data/fx/re_new100/result_35.pkl')
