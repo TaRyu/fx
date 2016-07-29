@@ -20,7 +20,7 @@ res = [SGDRegressor(), Ridge(), SVR(),
        KNeighborsRegressor(), RandomForestRegressor()]
 time_format = '%Y%m%d%H%M'
 result_tmp = np.empty(0)
-num_test = 8496 * 2
+num_test = int(8496 / 3) * 5
 
 
 if __name__ == '__main__':
