@@ -19,7 +19,11 @@ def show_pre(input_file='%s/EURUSDprediction.pkl' % FILE_PREX):
                   for i in range(len(t))])
     data = {'Real rates': t, 'Forecast of rates': p}
     df = pd.DataFrame(data, index=RANGE_TIME)
-    return df, t, p
+    return df
 
 if __name__ == '__main__':
-    df, t, p = show_pre()
+    eu = show_pre()
+    uj = show_pre(input_file='%s/USDJPYprediction.pkl' % FILE_PREX)
+    gu = show_pre(input_file='%s/GBPUSDprediction.pkl' % FILE_PREX)
+    au = show_pre(input_file='%s/AUDUSDprediction.pkl' % FILE_PREX)
+    ej = show_pre(input_file='%s/EURJPYprediction.pkl' % FILE_PREX)
