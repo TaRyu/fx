@@ -12,7 +12,7 @@ import time
 import tensorflow as tf
 from tensorflow.contrib import learn
 
-FX_LIST = ['EURUSD', 'USDJPY', 'GBPUSD', 'AUDUSD', 'EURJPY']
+FX_LIST = ['USDCHF', 'EURUSD', 'USDJPY', 'GBPUSD', 'AUDUSD', 'EURJPY']
 FILE_PREX = '../data/fx'
 optimizers = ['Momentum']
 # optimizers = ['GradientDescent', 'Adadelta',
@@ -54,13 +54,20 @@ num_test = 354
 if __name__ == '__main__':
     for fx in FX_LIST:
         for optimizer in optimizers:
-            re = learn.TensorFlowEstimator(
-                model_fn=conv_model,
-                n_classes=0,
-                batch_size=200, steps=20000,
-                optimizer=tf.train.MomentumOptimizer(
-                    learning_rate=0.001, momentum=0.5),
-            )
+            if optimizer == 'Momentum':
+                re = learn.TensorFlowEstimator(
+                    model_fn=conv_model,
+                    n_classes=0,
+                    batch_size=200, steps=20000,
+                    optimizer=tf.train.MomentumOptimizer(
+                        learning_rate=0.001, momentum=0.5))
+            else:
+                re = learn.TensorFlowEstimator(
+                    model_fn=conv_model,
+                    n_classes=0,
+                    batch_size=200, steps=20000,
+                    optimizer=optimizer,
+                    learning_rate=0.001)
             path_f_final = ['%s/%s_FINAL_M.npy' % (FILE_PREX, fx),
                             '%s/%s_FINAL_S.pkl' % (FILE_PREX, fx)]
             data = np.load(path_f_final[0])
