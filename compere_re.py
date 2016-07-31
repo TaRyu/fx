@@ -13,7 +13,7 @@ from sklearn.neighbors import KNeighborsRegressor
 from sklearn.ensemble import RandomForestRegressor
 from sklearn import metrics
 
-FX_LIST = ['EURUSD', 'USDJPY', 'GBPUSD', 'AUDUSD', 'EURJPY']
+FX_LIST = ['EURUSD', 'USDJPY', 'GBPUSD', 'AUDUSD', 'USDCHF', 'EURJPY']
 FILE_PREX = '../data/fx'
 names = ["SGD", 'Ridge', "SVR", 'KNN', "Random_Forest"]
 res = [SGDRegressor(), Ridge(), SVR(),
@@ -47,4 +47,5 @@ if __name__ == '__main__':
         data_s_test.to_pickle('%s/%s_com_pre_re.pkl' % (FILE_PREX, fx))
     result = pd.DataFrame(result_tmp.reshape(-1, len(names)),
                           index=FX_LIST, columns=names)
+    print(result)
     result.to_pickle('../data/fx/result_compere_re.pkl')

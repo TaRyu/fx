@@ -7,18 +7,17 @@ from __future__ import print_function
 import numpy as np
 import pandas as pd
 
-from sklearn.linear_model import Ridge
+from sklearn.linear_model import Ridge, SGDRegressor
 from sklearn.svm import SVR
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.ensemble import RandomForestRegressor
 from sklearn import metrics
 
-FX_LIST = ['EURUSD', 'USDJPY', 'GBPUSD', 'AUDUSD', 'EURJPY']
+FX_LIST = ['EURUSD', 'USDJPY', 'GBPUSD', 'AUDUSD', 'USDCHF', 'EURJPY']
 FILE_PREX = '../data/fx'
-names = ['Ridge', "SVR", 'KNN', "Random_Forest"]
-res = [Ridge(max_iter=20000), SVR(max_iter=20000),
-       KNeighborsRegressor(),
-       RandomForestRegressor()]
+names = ["SGD", 'Ridge', "SVR", 'KNN', "Random_Forest"]
+res = [SGDRegressor(), Ridge(), SVR(),
+       KNeighborsRegressor(), RandomForestRegressor()]
 time_format = '%Y%m%d%H%M'
 result_tmp = np.empty(0)
 num_test = 354
