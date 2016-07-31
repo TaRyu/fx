@@ -77,13 +77,13 @@ if __name__ == '__main__':
                 optimizer,
                 fx,
                 time.strftime(time_format, time.localtime()))
-            re.fit(data_train, (data_s_train['change'] / 100),
+            re.fit(data_train, (data_s_train['change']),
                    logdir=logdir)
             end = time.time()
             data_s_test['predict'] = re.predict(data_test)
             data_s_test.to_pickle('%s/%sprediction.pkl' % (logdir, fx))
             score = metrics.explained_variance_score(
-                (data_s_test['change'] / 100), re.predict(data_test))
+                (data_s_test['change']), re.predict(data_test))
             result_tmp = np.append(result_tmp, score)
             print(result_tmp)
     result = pd.DataFrame(result_tmp.reshape(-1, len(optimizers)),
