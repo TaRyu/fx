@@ -5,8 +5,8 @@ from pandas.tseries.offsets import CustomBusinessHour
 import pandas as pd
 import numpy as np
 
-FX_LIST = ['EURUSD', 'USDJPY', 'GBPUSD', 'AUDUSD', 'USDCHF', 'EURJPY']
-FX_LIST = ['USDCHF']
+FX_LIST = ['EURGBP', 'EURUSD', 'USDJPY', 'GBPUSD', 'AUDUSD', 'EURJPY']
+FX_LIST = ['EURGBP']
 FILE_PREX = '../data/fx'
 PATH_FILE_IN = '../data/fx/EURUSD.csv'
 PATH_FILE_OUT = 'EURUSD_H.pkl'

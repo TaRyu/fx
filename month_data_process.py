@@ -4,8 +4,8 @@ import pandas as pd
 import numpy as np
 from sklearn import preprocessing
 
-FX_LIST = ['EURUSD', 'USDJPY', 'GBPUSD', 'AUDUSD', 'USDCHF', 'EURJPY']
-FX_LIST = ['USDCHF']
+FX_LIST = ['EURGBP', 'EURUSD', 'USDJPY', 'GBPUSD', 'AUDUSD', 'EURJPY']
+FX_LIST = ['EURGBP']
 FILE_PREX = '../data/fx'
 PATH_FILE_IN = '../data/fx/EURUSD.txt'
 PATH_FILE_FINAL = ['EURUSD_MON_f.npy', 'EURUSD_MON_t.npy']

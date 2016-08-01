@@ -12,7 +12,7 @@ import time
 import tensorflow as tf
 from tensorflow.contrib import learn
 
-FX_LIST = ['USDCHF', 'EURUSD', 'USDJPY', 'GBPUSD', 'AUDUSD', 'EURJPY']
+FX_LIST = ['EURGBP', 'EURUSD', 'USDJPY', 'GBPUSD', 'AUDUSD', 'EURJPY']
 FILE_PREX = '../data/fx'
 optimizers = ['Momentum']
 # optimizers = ['GradientDescent', 'Adadelta',
