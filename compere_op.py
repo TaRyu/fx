@@ -98,10 +98,10 @@ if __name__ == '__main__':
             print(result_tmp1)
             result_tmp2 = np.append(result_tmp, score2)
             print(result_tmp2)
-    result1 = pd.DataFrame(result_tmp.reshape(-1, len(optimizers)),
+    result1 = pd.DataFrame(result_tmp1.reshape(-1, len(optimizers)),
                            index=FX_LIST, columns=optimizers)
     print(result1)
-    result2 = pd.DataFrame(result_tmp.reshape(-1, len(optimizers)),
+    result2 = pd.DataFrame(result_tmp2.reshape(-1, len(optimizers)),
                            index=FX_LIST, columns=optimizers)
     print(result2)
     result1.to_pickle('../data/fx/re_op_m/result1.pkl')
