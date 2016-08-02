@@ -49,7 +49,8 @@ def conv_model(X, y):
 
 
 time_format = '%Y%m%d%H%M'
-result_tmp = np.empty(0)
+result_tmp1 = np.empty(0)
+result_tmp2 = np.empty(0)
 num_test = 354
 
 if __name__ == '__main__':
@@ -94,9 +95,9 @@ if __name__ == '__main__':
                 (data_s_test['change']), re.predict(data_test))
             score2 = metrics.mean_absolute_error(
                 (data_s_test['change']), re.predict(data_test))
-            result_tmp1 = np.append(result_tmp, score1)
+            result_tmp1 = np.append(result_tmp1, score1)
             print(result_tmp1)
-            result_tmp2 = np.append(result_tmp, score2)
+            result_tmp2 = np.append(result_tmp2, score2)
             print(result_tmp2)
     result1 = pd.DataFrame(result_tmp1.reshape(-1, len(optimizers)),
                            index=FX_LIST, columns=optimizers)
