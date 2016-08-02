@@ -97,6 +97,7 @@ if __name__ == '__main__':
             result_tmp1 = np.append(result_tmp, score1)
             print(result_tmp1)
             result_tmp2 = np.append(result_tmp, score2)
+            print(result_tmp2)
     result1 = pd.DataFrame(result_tmp.reshape(-1, len(optimizers)),
                            index=FX_LIST, columns=optimizers)
     print(result1)

@@ -45,13 +45,10 @@ if __name__ == '__main__':
             score2 = metrics.mean_absolute_error(
                 (data_s_test['change']), re.predict(data_test))
             result_tmp1 = np.append(result_tmp, score1)
-            print(result_tmp1)
             result_tmp2 = np.append(result_tmp, score2)
     result1 = pd.DataFrame(result_tmp.reshape(-1, len(names)),
                            index=FX_LIST, columns=names)
-    print(result1)
     result2 = pd.DataFrame(result_tmp.reshape(-1, len(names)),
                            index=FX_LIST, columns=names)
-    print(result2)
     result1.to_pickle('../data/fx/result_compere_re1.pkl')
     result2.to_pickle('../data/fx/result_compere_re2.pkl')
