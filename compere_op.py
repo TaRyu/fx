@@ -90,11 +90,18 @@ if __name__ == '__main__':
             end = time.time()
             data_s_test['predict'] = re.predict(data_test)
             data_s_test.to_pickle('%s/%sprediction.pkl' % (logdir, fx))
-            score = metrics.explained_variance_score(
+            score1 = metrics.explained_variance_score(
                 (data_s_test['change']), re.predict(data_test))
-            result_tmp = np.append(result_tmp, score)
-            print(result_tmp)
-    result = pd.DataFrame(result_tmp.reshape(-1, len(optimizers)),
-                          index=FX_LIST, columns=optimizers)
-    print(result)
-    result.to_pickle('../data/fx/re_op_m/result.pkl')
+            score2 = metrics.mean_absolute_error(
+                (data_s_test['change']), re.predict(data_test))
+            result_tmp1 = np.append(result_tmp, score1)
+            print(result_tmp1)
+            result_tmp2 = np.append(result_tmp, score2)
+    result1 = pd.DataFrame(result_tmp.reshape(-1, len(optimizers)),
+                           index=FX_LIST, columns=optimizers)
+    print(result1)
+    result2 = pd.DataFrame(result_tmp.reshape(-1, len(optimizers)),
+                           index=FX_LIST, columns=optimizers)
+    print(result2)
+    result1.to_pickle('../data/fx/re_op_m/result1.pkl')
+    result1.to_pickle('../data/fx/re_op_m/result2.pkl')
