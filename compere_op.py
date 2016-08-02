@@ -12,7 +12,8 @@ import time
 import tensorflow as tf
 from tensorflow.contrib import learn
 
-FX_LIST = ['USDJPY', 'EURGBP', 'EURUSD', 'GBPUSD', 'AUDUSD', 'EURJPY']
+FX_LIST = ['USDJPY', 'EURUSD', 'GBPUSD',
+           'AUDUSD', 'USDCHF', 'EURJPY', 'EURGBP']
 FILE_PREX = '../data/fx'
 optimizers = ['SGD', 'Momentum']
 # optimizers = ['GradientDescent', 'Adadelta',
@@ -41,7 +42,7 @@ def conv_model(X, y):
     # densely connected layer with 1024 neurons
     with tf.variable_scope('FC_Layer'):
         h_fc1 = learn.ops.dnn(
-            h_pool2_flat, [1024], activation=tf.nn.relu, dropout=0.2)
+            h_pool2_flat, [1024], activation=tf.nn.relu, dropout=0.8)
     with tf.variable_scope('LR_Layer'):
         o_linear = learn.models.linear_regression(h_fc1, y)
     return o_linear
@@ -58,14 +59,14 @@ if __name__ == '__main__':
                 re = learn.TensorFlowEstimator(
                     model_fn=conv_model,
                     n_classes=0,
-                    batch_size=150, steps=20000,
+                    batch_size=100, steps=20000,
                     optimizer=tf.train.MomentumOptimizer(
                         learning_rate=0.001, momentum=0.5))
             else:
                 re = learn.TensorFlowEstimator(
                     model_fn=conv_model,
                     n_classes=0,
-                    batch_size=150, steps=20000,
+                    batch_size=100, steps=20000,
                     optimizer=optimizer,
                     learning_rate=0.001)
             path_f_final = ['%s/%s_FINAL_M.npy' % (FILE_PREX, fx),
