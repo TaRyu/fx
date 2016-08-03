@@ -15,7 +15,7 @@ from tensorflow.contrib import learn
 FX_LIST = ['USDJPY', 'EURUSD', 'GBPUSD',
            'AUDUSD', 'EURJPY', 'EURGBP']
 FILE_PREX = '../data/fx'
-optimizers = ['SGD', 'Momentum']
+optimizers = ['Momentum']
 # optimizers = ['GradientDescent', 'Adadelta',
 #               'Momentum', 'Adam', 'Ftrl', 'RMSProp']
 
@@ -42,7 +42,7 @@ def conv_model(X, y):
     # densely connected layer with 1024 neurons
     with tf.variable_scope('FC_Layer'):
         h_fc1 = learn.ops.dnn(
-            h_pool2_flat, [1024], activation=tf.nn.relu, dropout=0.5)
+            h_pool2_flat, [1024], activation=tf.nn.relu, dropout=0.2)
     with tf.variable_scope('LR_Layer'):
         o_linear = learn.models.linear_regression(h_fc1, y)
     return o_linear
