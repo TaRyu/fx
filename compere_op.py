@@ -60,14 +60,14 @@ if __name__ == '__main__':
                 re = learn.TensorFlowEstimator(
                     model_fn=conv_model,
                     n_classes=0,
-                    batch_size=80, steps=20000,
+                    batch_size=70, steps=20000,
                     optimizer=tf.train.MomentumOptimizer(
                         learning_rate=0.001, momentum=0.5))
             else:
                 re = learn.TensorFlowEstimator(
                     model_fn=conv_model,
                     n_classes=0,
-                    batch_size=80, steps=20000,
+                    batch_size=70, steps=20000,
                     optimizer=optimizer,
                     learning_rate=0.001)
             path_f_final = ['%s/%s_FINAL_M.npy' % (FILE_PREX, fx),
@@ -82,7 +82,7 @@ if __name__ == '__main__':
             data_s_train = data_s[:data.shape[0] - num_test]
             data_s_test = data_s[data.shape[0] - num_test:]
             start = time.time()
-            logdir = '../data/fx/re_op_m/tensorboard_models/%s%s%s' % (
+            logdir = '../data/fx/re_op_M70/tensorboard_models/%s%s%s' % (
                 optimizer,
                 fx,
                 time.strftime(time_format, time.localtime()))
@@ -105,5 +105,5 @@ if __name__ == '__main__':
     result2 = pd.DataFrame(result_tmp2.reshape(-1, len(optimizers)),
                            index=FX_LIST, columns=optimizers)
     print(result2)
-    result1.to_pickle('../data/fx/re_op_m/result1.pkl')
-    result1.to_pickle('../data/fx/re_op_m/result2.pkl')
+    result1.to_pickle('../data/fx/re_op_M70/result1.pkl')
+    result1.to_pickle('../data/fx/re_op_M70/result2.pkl')
