@@ -13,13 +13,18 @@ from tensorflow.contrib import learn
 
 FX_LIST = ['USDJPY', 'EURUSD', 'GBPUSD',
            'AUDUSD', 'EURJPY', 'EURGBP']
-SCALE = ['MON', 'DAY']
+SCALE = ['DAY', 'MON']
 FILE_PREX = '../data/fx'
 
 time_format = '%Y%m%d%H%M'
 result_tmp1 = np.empty(0)
 result_tmp2 = np.empty(0)
 num_test = 354
+
+
+def my_model(x, y):
+    layers = learn.ops.dnn(x, [10], dropout=0.5)
+    return learn.models.linear_regression(layers, y)
 
 
 def main(fx, scale):
@@ -41,13 +46,14 @@ def main(fx, scale):
     data_s_train = data_s[:data.shape[0] - num_test]
     data_s_test = data_s[data.shape[0] - num_test:]
 
-    feature_columns = learn.infer_real_valued_columns_from_input(data_train)
-    regressor = learn.DNNRegressor(
-        feature_columns=feature_columns, hidden_units=[10])
+    regressor = learn.TensorFlowEstimator(
+        model_fn=my_model,
+        n_classes=0,
+        batch_size=100, steps=20000,
+        learning_rate=0.001)
 
     # Fit
-    regressor.fit(data_train, data_s_train, steps=5000,
-                  batch_size=1, logdir=logdir)
+    regressor.fit(data_train, data_s_train, logdir=logdir)
 
     # Predict and score
     prediction = regressor.predict(data_test)
@@ -66,7 +72,7 @@ def main(fx, scale):
 if __name__ == '__main__':
     for fx in FX_LIST:
         for scale in SCALE:
-            score1, score2 = main(fx, SCALE)
+            score1, score2 = main(fx, scale)
             result_tmp1 = np.append(result_tmp1, score1)
             result_tmp2 = np.append(result_tmp2, score2)
     result1 = pd.DataFrame(result_tmp1.reshape(-1, len(SCALE)),
