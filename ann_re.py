@@ -48,8 +48,8 @@ def main(fx, scale):
 
     regressor = learn.TensorFlowEstimator(
         model_fn=my_model,
-        n_classes=0,
-        batch_size=100, steps=20000,
+        n_classes=0, optimizer='SGD',
+        batch_size=300, steps=20000,
         learning_rate=0.001)
 
     # Fit
