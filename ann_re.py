@@ -15,37 +15,27 @@ from tensorflow.contrib import learn
 FX_LIST = ['USDJPY', 'EURUSD', 'GBPUSD',
            'AUDUSD', 'EURJPY', 'EURGBP']
 FILE_PREX = '../data/fx'
-optimizers = ['SGD']
+optimizers = ['Momentum']
 # optimizers = ['GradientDescent', 'Adadelta',
 #               'Momentum', 'Adam', 'Ftrl', 'RMSProp']
 
 
-def max_pool_2x2(tensor_in):
-    return tf.nn.max_pool(tensor_in, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1],
-                          padding='SAME')
+def main(unused_argv):
+    # Load dataset
 
+    # Build 2 layer fully connected DNN with 10, 10 units respectively.
+    feature_columns = learn.infer_real_valued_columns_from_input(x_train)
+    regressor = learn.DNNRegressor(
+        feature_columns=feature_columns, hidden_units=[10, 10])
 
-def conv_model(X, y):
-    X = tf.reshape(X, [-1, 24, 24, 1])
-    # first conv layer will compute 32 features for each 5x5 patch
-    with tf.variable_scope('Conv_Layer1'):
-        h_conv1 = learn.ops.conv2d(X, n_filters=32, filter_shape=[5, 5],
-                                   bias=True, activation=tf.nn.relu)
-        h_pool1 = max_pool_2x2(h_conv1)
-    # second conv layer will compute 64 features for each 5x5 patch
-    with tf.variable_scope('Conv_Layer2'):
-        h_conv2 = learn.ops.conv2d(h_pool1, n_filters=64, filter_shape=[5, 5],
-                                   bias=True, activation=tf.nn.relu)
-        h_pool2 = max_pool_2x2(h_conv2)
-        # reshape tensor into a batch of vectors
-        h_pool2_flat = tf.reshape(h_pool2, [-1, 6 * 6 * 64])
-    # densely connected layer with 1024 neurons
-    with tf.variable_scope('FC_Layer'):
-        h_fc1 = learn.ops.dnn(
-            h_pool2_flat, [1024], activation=tf.nn.relu, dropout=0.5)
-    with tf.variable_scope('LR_Layer'):
-        o_linear = learn.models.linear_regression(h_fc1, y)
-    return o_linear
+    # Fit
+    regressor.fit(x_train, y_train, steps=5000, batch_size=1)
+
+    # Predict and score
+    y_predicted = regressor.predict(scaler.transform(x_test))
+    score = metrics.mean_squared_error(y_predicted, y_test)
+
+    print('MSE: {0:f}'.format(score))
 
 
 time_format = '%Y%m%d%H%M'
@@ -60,14 +50,14 @@ if __name__ == '__main__':
                 re = learn.TensorFlowEstimator(
                     model_fn=conv_model,
                     n_classes=0,
-                    batch_size=100, steps=20000,
+                    batch_size=70, steps=20000,
                     optimizer=tf.train.MomentumOptimizer(
                         learning_rate=0.001, momentum=0.5))
             else:
                 re = learn.TensorFlowEstimator(
                     model_fn=conv_model,
                     n_classes=0,
-                    batch_size=100, steps=20000,
+                    batch_size=70, steps=20000,
                     optimizer=optimizer,
                     learning_rate=0.001)
             path_f_final = ['%s/%s_FINAL_M.npy' % (FILE_PREX, fx),
@@ -82,7 +72,7 @@ if __name__ == '__main__':
             data_s_train = data_s[:data.shape[0] - num_test]
             data_s_test = data_s[data.shape[0] - num_test:]
             start = time.time()
-            logdir = '../data/fx/re_op_S100/tensorboard_models/%s%s%s' % (
+            logdir = '../data/fx/ann/tensorboard_models/%s%s%s' % (
                 optimizer,
                 fx,
                 time.strftime(time_format, time.localtime()))
@@ -105,5 +95,5 @@ if __name__ == '__main__':
     result2 = pd.DataFrame(result_tmp2.reshape(-1, len(optimizers)),
                            index=FX_LIST, columns=optimizers)
     print(result2)
-    result1.to_pickle('../data/fx/re_op_S100/result1.pkl')
-    result1.to_pickle('../data/fx/re_op_S100/result2.pkl')
+    result1.to_pickle('../data/fx/ann/result1.pkl')
+    result1.to_pickle('../data/fx/ann/result2.pkl')

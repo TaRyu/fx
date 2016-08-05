@@ -25,8 +25,8 @@ num_test = 354
 
 if __name__ == '__main__':
     for fx in FX_LIST:
-        path_f_final = ['%s/%s_MON_f.npy' % (FILE_PREX, fx),
-                        '%s/%s_MON_t.pkl.npy' % (FILE_PREX, fx)]
+        path_f_final = ['%s/%s_DAY_f.npy' % (FILE_PREX, fx),
+                        '%s/%s_DAY_t.pkl.npy' % (FILE_PREX, fx)]
         path_f_in = '%s/%s_H.pkl' % (FILE_PREX, fx)
         pd_data = pd.read_pickle(path_f_in)['close']
         fx_max = max(pd_data)
@@ -38,7 +38,7 @@ if __name__ == '__main__':
         data_s_train = data_s[:data.shape[0] - num_test]
         data_s_test = data_s[data.shape[0] - num_test:]
         for i in range(len(names)):
-            prdir = '../data/fx/prediction/24/%s' % names[i]
+            prdir = '../data/fx/prediction/1/%s' % names[i]
             re = res[i]
             re.fit(data_train, data_s_train)
             prediction = re.predict(data_test)
@@ -56,5 +56,5 @@ if __name__ == '__main__':
                            index=FX_LIST, columns=names)
     result2 = pd.DataFrame(result_tmp2.reshape(-1, len(names)),
                            index=FX_LIST, columns=names)
-    result1.to_pickle('../data/fx/result_compere_re_month1.pkl')
-    result2.to_pickle('../data/fx/result_compere_re_month2.pkl')
+    result1.to_pickle('../data/fx/result_compere_re_day1.pkl')
+    result2.to_pickle('../data/fx/result_compere_re_day2.pkl')

@@ -27,17 +27,17 @@ def process(file_in=PATH_FILE_IN, file_out=PATH_FILE_FINAL):
     data = preprocessing.minmax_scale(pd.read_pickle(
         file_in)['close'])
     data = data.reshape(-1, 24)
-    data_m = np.array([[data[i + x * 24][0] for x in range(5)]
-                       for i in range(len(data) - 5 * 24 + 1)])
+    data_m = np.array([[data[i + x][0] for x in range(5)]
+                       for i in range(len(data) - 5 + 1)])
     data_m = data_m.reshape(-1, 5)
-    data_s = np.array([data[i + 5 * 24][0]
-                       for i in range(len(data) - 5 * 24)])
+    data_s = np.array([data[i + 5][0]
+                       for i in range(len(data) - 5)])
     np.save(file_out[0], data_m[:len(data_m) - 1])
     np.save(file_out[1], data_s)
 
 if __name__ == '__main__':
     for fx in FX_LIST:
         path_f_in = '%s/%s_H.pkl' % (FILE_PREX, fx)
-        path_f_final = ['%s/%s_MON_f.npy' % (FILE_PREX, fx),
-                        '%s/%s_MON_t.pkl' % (FILE_PREX, fx)]
+        path_f_final = ['%s/%s_DAY_f.npy' % (FILE_PREX, fx),
+                        '%s/%s_DAY_t.pkl' % (FILE_PREX, fx)]
         process(path_f_in, path_f_final)

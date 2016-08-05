@@ -15,9 +15,8 @@ from sklearn import metrics
 
 FX_LIST = ['EURGBP', 'EURUSD', 'USDJPY', 'GBPUSD', 'AUDUSD', 'EURJPY']
 FILE_PREX = '../data/fx'
-names = ["SGD", 'Ridge', "SVR", 'KNN', "Random_Forest"]
-res = [SGDRegressor(), Ridge(), SVR(),
-       KNeighborsRegressor(), RandomForestRegressor()]
+names = ['k-NN', "SVM"]
+res = [KNeighborsRegressor(), SVR()]
 time_format = '%Y%m%d%H%M'
 result_tmp1 = np.empty(0)
 result_tmp2 = np.empty(0)
@@ -38,9 +37,12 @@ if __name__ == '__main__':
         data_s_train = data_s[:data.shape[0] - num_test]
         data_s_test = data_s[data.shape[0] - num_test:]
         for i in range(len(names)):
+            prdir = '../data/fx/prediction/cross/%s' % names[i]
             re = res[i]
             re.fit(data_train, data_s_train['change'])
             prediction = re.predict(data_test)
+            data_s_test['predict'] = re.predict(data_test)
+            data_s_test.to_pickle('%s/%sprediction.pkl' % (prdir, fx))
             score1 = metrics.explained_variance_score(
                 (data_s_test['change']), re.predict(data_test))
             score2 = metrics.mean_absolute_error(

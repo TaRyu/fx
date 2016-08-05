@@ -14,7 +14,7 @@ RANGE_TIME = pd.DatetimeIndex(start='20150106',
 
 def show_pre(input_file='%s/EURUSDprediction.pkl' % FILE_PREX):
     pre = pd.read_pickle(input_file).reset_index()
-    t = pre['close_price'][1:].values
+    t = pre['close_price'][:len(pre) - 1].values
     p = np.array([pre['open_price'][i + 1] / (1 - pre['predict'][i] / 100)
                   for i in range(len(t))])
     data = {'Real rates': t, 'Forecast of rates': p}
