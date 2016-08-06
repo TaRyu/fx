@@ -50,7 +50,7 @@ def main(fx, scale):
         model_fn=my_model,
         n_classes=0, optimizer='SGD',
         batch_size=len(data_train), steps=20000,
-        learning_rate=0.001)
+        learning_rate=0.2)
 
     # Fit
     regressor.fit(data_train, data_s_train, logdir=logdir)
