@@ -13,7 +13,7 @@ from tensorflow.contrib import learn
 
 FX_LIST = ['EURUSD', 'USDJPY', 'GBPUSD',
            'AUDUSD', 'EURJPY', 'EURGBP']
-FILE_PREX = '../data/fx/app/data'
+FILE_PREX = '../../data/fx/app/data'
 optimizers = ['SGD']
 # optimizers = ['GradientDescent', 'Adadelta',
 #               'Momentum', 'Adam', 'Ftrl', 'RMSProp']
