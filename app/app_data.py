@@ -32,12 +32,12 @@ def m2h(file_in=PATH_FILE_IN, file_out=PATH_FILE_OUT):
 
 def one2two(file_in=PATH_FILE_OUT, file_out=PATH_FILE_FINAL):
     data = pd.read_pickle(file_in)['close']
-    data = data.reshape(-1, 24)
-    data = np.array([data[i:i + 24] for i in range(data.shape[0] - 24 + 1)])
+    data = np.array([data[i:i + 576] for i in range(data.shape[0] - 576 + 1)])
+    data = data.reshape(-1, 576)
     data_s = {
-        'open_price': np.array([data[i][0][0]
+        'open_price': np.array([data[i][0]
                                 for i in range(data.shape[0] - 1)]),
-        'close_price': np.array([data[i][int(NUM_PIX / 24) - 1][23]
+        'close_price': np.array([data[i][575]
                                  for i in range(data.shape[0] - 1)]),
         'max_price': np.array([data[i].max()
                                for i in range(data.shape[0] - 1)]),
@@ -48,18 +48,20 @@ def one2two(file_in=PATH_FILE_OUT, file_out=PATH_FILE_FINAL):
         'median_price': np.array([np.median(data[i])
                                   for i in range(data.shape[0] - 1)]),
         'buy_or_sell': np.array(
-            [int(data[i + 1][int(NUM_PIX / 24) - 1][23] > data[i + 1][0][0])
+            [int(data[i + 1][575] > data[i + 1][0])
              for i in range(data.shape[0] - 1)]),
         'change': np.array(
-            [(data[i + 1][int(NUM_PIX / 24) - 1][23] - data[i + 1][0][0]) /
-             data[i + 1][int(NUM_PIX / 24) - 1][23] * 100
+            [(data[i + 1][575] - data[i + 1][0]) /
+             data[i + 1][575] * 100
              for i in range(data.shape[0] - 1)])}
     data_s = pd.DataFrame(data_s)
     bins = [-100, -5, -4, -3, -2, -1.5, -1, -
             0.5, 0, 0.5, 1, 1.5, 2, 3, 4, 5, 100]
+    bins = [0.01 * x for x in bins]
     labels = [-8, -7, -6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 7, 8]
     data_s['change_D_16'] = pd.cut(data_s['change'], bins, labels=labels)
     bins = [-100, -5, -2, 0, 2, 5, 100]
+    bins = [0.01 * x for x in bins]
     labels = [-3, -2, -1, 1, 2, 3]
     data_s['change_D'] = pd.cut(data_s['change'], bins, labels=labels)
     data = data.reshape(len(data), NUM_PIX)
