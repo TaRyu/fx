@@ -74,9 +74,7 @@ if __name__ == '__main__':
         data = np.array([(data[i] - data_s['min_price'][i]) /
                          range_price[i] for i in range(data.shape[0])])
         start = time.time()
-        logdir = '../../data/fx/app/tensorboard_models/%s' % fx
-        re.fit(data, (data_s['change']),
-               logdir=logdir)
+        re.fit(data, data_s['change'])
         re.save('../../data/fx/app/tensorboard_models/saves/%s' % fx)
         data = data_process(fx)
         data = np.array([(data[i] - data[i].min()) / (data[i].max() -
@@ -84,4 +82,4 @@ if __name__ == '__main__':
         df['%s' % fx] = re.predict(data)
         end = time.time()
         print('%s over with %f.' % (fx, end - start))
-    df.to_pickle('../../data/fx/app/prediction.pkl')
+        df.to_pickle('../../data/fx/app/prediction.pkl')
