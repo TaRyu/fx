@@ -13,7 +13,7 @@ def data_process(fx='EURUSD'):
     data = data['close'].reshape(-1, 24)
     data = np.array([data[i:i + 24] for i in range(data.shape[0] - 24 + 1)])
     data = data.reshape(len(data), NUM_PIX)
-    np.save('%s/%s.npy' % (FILE_PREX, fx))
+    np.save('%s/%s.npy' % (FILE_PREX, fx), data)
     return data
 
 
@@ -30,4 +30,4 @@ if __name__ == '__main__':
     df = pd.DataFrame()
     for fx in FX_LIST:
         df['%s' % fx] = load_predict(fx)
-    df.to_pickle('%s/prediction.pkl')
+    df.to_pickle('../../data/fx/app/prediction.pkl')

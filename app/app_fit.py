@@ -14,6 +14,8 @@ from tensorflow.contrib import learn
 FX_LIST = ['EURUSD', 'USDJPY', 'GBPUSD',
            'AUDUSD', 'EURJPY', 'EURGBP']
 FILE_PREX = '../../data/fx/app/data'
+NUM_PIX = 24 * 24
+time_format = '%Y%m%d%H%M'
 optimizers = ['SGD']
 # optimizers = ['GradientDescent', 'Adadelta',
 #               'Momentum', 'Adam', 'Ftrl', 'RMSProp']
@@ -47,33 +49,39 @@ def conv_model(X, y):
     return o_linear
 
 
+def data_process(fx):
+    data = pd.read_csv('../../data/fx/app/%s.csv' % fx)
+    data = data['close'].reshape(-1, 24)
+    data = np.array([data[i:i + 24] for i in range(data.shape[0] - 24 + 1)])
+    data = data.reshape(len(data), NUM_PIX)
+    np.save('../../data/fx/app/%s.npy' % fx, data)
+    return data
+
 if __name__ == '__main__':
+    df = pd.DataFrame()
     for fx in FX_LIST:
-        for optimizer in optimizers:
-            if optimizer == 'Momentum':
-                re = learn.TensorFlowEstimator(
-                    model_fn=conv_model,
-                    n_classes=0,
-                    batch_size=80, steps=20000,
-                    optimizer=tf.train.MomentumOptimizer(
-                        learning_rate=0.005, momentum=0.5))
-            else:
-                re = learn.TensorFlowEstimator(
-                    model_fn=conv_model,
-                    n_classes=0,
-                    batch_size=80, steps=20000,
-                    optimizer=optimizer,
-                    learning_rate=0.005)
-            path_f_final = ['%s/%s_FINAL_M.npy' % (FILE_PREX, fx),
-                            '%s/%s_FINAL_S.pkl' % (FILE_PREX, fx)]
-            data = np.load(path_f_final[0])
-            data_s = pd.read_pickle(path_f_final[1])
-            range_price = data_s['max_price'] - data_s['min_price']
-            data = np.array([(data[i] - data_s['min_price'][i]) /
-                             range_price[i] for i in range(data.shape[0])])
-            start = time.time()
-            logdir = '../../data/fx/app/tensorboard_models/%s' % fx
-            re.fit(data, (data_s['change']),
-                   logdir=logdir)
-            end = time.time()
-            print('%s over with %s' % (fx, optimizer))
+        re = learn.TensorFlowEstimator(
+            model_fn=conv_model,
+            n_classes=0,
+            batch_size=80, steps=20000,
+            optimizer='SGD',
+            learning_rate=0.005)
+        path_f_final = ['%s/%s_FINAL_M.npy' % (FILE_PREX, fx),
+                        '%s/%s_FINAL_S.pkl' % (FILE_PREX, fx)]
+        data = np.load(path_f_final[0])
+        data_s = pd.read_pickle(path_f_final[1])
+        range_price = data_s['max_price'] - data_s['min_price']
+        data = np.array([(data[i] - data_s['min_price'][i]) /
+                         range_price[i] for i in range(data.shape[0])])
+        start = time.time()
+        logdir = '../../data/fx/app/tensorboard_models/%s' % fx
+        re.fit(data, (data_s['change']),
+               logdir=logdir)
+        re.save('../../data/fx/app/tensorboard_models/saves/%s' % fx)
+        data = data_process(fx)
+        data = np.array([(data[i] - data[i].min()) / (data[i].max() -
+                                                      data[i].min()) for i in range(data.shape[0])])
+        df['%s' % fx] = re.predict(data)
+        end = time.time()
+        print('%s over with %f.' % (fx, end - start))
+    df.to_pickle('../../data/fx/app/prediction.pkl')
