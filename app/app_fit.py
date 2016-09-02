@@ -77,9 +77,11 @@ if __name__ == '__main__':
         re.fit(data, data_s['change'])
         re.save('../../data/fx/app/tensorboard_models/saves/%s' % fx)
         data = data_process(fx)
-        data = np.array([(data[i] - data[i].min()) / (data[i].max() -
-                                                      data[i].min()) for i in range(data.shape[0])])
-        df['%s' % fx] = re.predict(data)
+        data_p = np.array([(data[i] - data[i].min()) / (data[i].max() -
+                                                        data[i].min()) for i in range(data.shape[0])])
+        df['%s' % fx] = re.predict(data_p)
+        df['%s_open' % fx] = np.array([data[i][0]
+                                       for i in range(data.shape[0])])
         end = time.time()
         print('%s over with %f.' % (fx, end - start))
         df.to_pickle('../../data/fx/app/prediction.pkl')
