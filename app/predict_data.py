@@ -7,7 +7,7 @@ FILE_PREX = '../../data/fx/app/data'
 
 
 def get_data(fx):
-    data = pd.read_pickle('%s/%s_H.pkl' % (FILE_PREX, fx))[-720:]
+    data = pd.read_pickle('%s/%s_H.pkl' % (FILE_PREX, fx))[-24 * 24 * 2:]
     data.to_csv('../../data/fx/app/%s.csv' % fx)
 
 if __name__ == '__main__':

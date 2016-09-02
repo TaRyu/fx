@@ -51,7 +51,8 @@ def conv_model(X, y):
 
 def data_process(fx):
     data = pd.read_csv('../../data/fx/app/%s.csv' % fx)['close']
-    data = np.array([data[i:i + 576] for i in range(data.shape[0] - 576 + 1)])
+    data = data.reshape(-1, 24)
+    data = np.array([data[i:i + 24] for i in range(data.shape[0] - 24 + 1)])
     data = data.reshape(-1, NUM_PIX)
     np.save('../../data/fx/app/%s.npy' % fx, data)
     return data
@@ -62,7 +63,7 @@ if __name__ == '__main__':
         re = learn.TensorFlowEstimator(
             model_fn=conv_model,
             n_classes=0,
-            batch_size=80, steps=20000,
+            batch_size=80, steps=2,
             optimizer='SGD',
             learning_rate=0.005)
         path_f_final = ['%s/%s_FINAL_M.npy' % (FILE_PREX, fx),
