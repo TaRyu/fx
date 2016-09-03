@@ -51,8 +51,7 @@ def conv_model(X, y):
 
 def data_process(fx):
     data = pd.read_csv('../../data/fx/app/%s.csv' % fx)['close']
-    data = data.reshape(-1, 24)
-    data = np.array([data[i:i + 24] for i in range(data.shape[0] - 24 + 1)])
+    data = np.array([data[i:i + 576] for i in range(data.shape[0] - 576 + 1)])
     data = data.reshape(-1, NUM_PIX)
     np.save('../../data/fx/app/%s.npy' % fx, data)
     return data

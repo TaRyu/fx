@@ -51,7 +51,7 @@ def one2two(file_in=PATH_FILE_OUT, file_out=PATH_FILE_FINAL):
     bins = [0.01 * x for x in bins]
     labels = [-3, -2, -1, 1, 2, 3]
     data_s['change_D'] = pd.cut(data_s['change'], bins, labels=labels)
-    data = data.reshape(len(data), NUM_PIX)
+    data = data.reshape(-1, NUM_PIX)
     np.save(file_out[0], data[:len(data) - 1])
     data_s.to_pickle(file_out[1])
 
