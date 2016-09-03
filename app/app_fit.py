@@ -59,6 +59,7 @@ def data_process(fx):
 
 if __name__ == '__main__':
     df = pd.DataFrame()
+    df = df.reset_index()
     for fx in FX_LIST:
         re = learn.TensorFlowEstimator(
             model_fn=conv_model,
