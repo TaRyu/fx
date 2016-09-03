@@ -59,7 +59,6 @@ def data_process(fx):
 
 if __name__ == '__main__':
     df = pd.DataFrame()
-    df = df.reset_index()
     for fx in FX_LIST:
         re = learn.TensorFlowEstimator(
             model_fn=conv_model,
@@ -80,7 +79,8 @@ if __name__ == '__main__':
         data = data_process(fx)
         data_p = np.array([(data[i] - data[i].min()) / (data[i].max() -
                                                         data[i].min()) for i in range(data.shape[0])])
-        df['%s' % fx] = re.predict(data_p)
+        prediction = re.predict(data_p)
+        df['%s' % fx] = prediction.reshape(len(prediction))
         df['%s_open' % fx] = np.array([data[i][0]
                                        for i in range(data.shape[0])])
         end = time.time()
