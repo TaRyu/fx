@@ -69,7 +69,7 @@ if __name__ == '__main__':
                     n_classes=0,
                     batch_size=80, steps=20000,
                     optimizer=optimizer,
-                    learning_rate=0.001)
+                    learning_rate=0.005)
             path_f_final = ['%s/%s_FINAL_M_new100.npy' % (FILE_PREX, fx),
                             '%s/%s_FINAL_S_new100.pkl' % (FILE_PREX, fx)]
             data = np.load(path_f_final[0])
@@ -82,7 +82,7 @@ if __name__ == '__main__':
             data_s_train = data_s[:data.shape[0] - num_test]
             data_s_test = data_s[data.shape[0] - num_test:]
             start = time.time()
-            logdir = '../data/fx/re_op_S110001/tensorboard_models/%s%s%s' % (
+            logdir = '../data/fx/re/tensorboard_models/%s%s%s' % (
                 optimizer,
                 fx,
                 time.strftime(time_format, time.localtime()))
@@ -105,5 +105,5 @@ if __name__ == '__main__':
     result2 = pd.DataFrame(result_tmp2.reshape(-1, len(optimizers)),
                            index=FX_LIST, columns=optimizers)
     print(result2)
-    result1.to_pickle('../data/fx/re_op_S110001/result1.pkl')
-    result1.to_pickle('../data/fx/re_op_S110001/result2.pkl')
+    result1.to_pickle('../data/fx/re/result1.pkl')
+    result1.to_pickle('../data/fx/re/result2.pkl')
