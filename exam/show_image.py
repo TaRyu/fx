@@ -2,9 +2,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
+FILE_PREX = '../../../data/fx'
+
 fig, ax = plt.subplots()
 
-n = np.load('../data/fx/EURUSD_FINAL_M.npy')[0]
+n = np.load('%s/Fs/EURUSD_1.npy' % FILE_PREX)[0]
 
 n_range = np.max(n) - np.min(n)
 image = np.array([(n[i] - np.min(n)) / n_range for i in range(len(n))])
